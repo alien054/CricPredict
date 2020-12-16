@@ -1,0 +1,23 @@
+batsman
+
+run 
+ball faced
+boundary
+dot ball
+single/double
+out/not_out
+batting position
+50/100
+innings
+non strike
+
+
+bowler
+
+run_consumed
+ball_delivered
+boundary
+wicket
+5 wicket
+10 wicket
+innings
