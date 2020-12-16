@@ -25,7 +25,7 @@ end = 5000  # values should be 5000  10000   15000   20000
 
 csv_file = open('playerData_'+str(start)+"_"+str(end)+"_" +
                 current_time+'.csv', 'w', newline='')
-fieldnames = list(player.keys())
+fieldnames = ["id","born", "name", "country","role","batting_style","bowling_style","bowling_hand","bowling_type"]
 writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 writer.writeheader()
 
@@ -43,7 +43,7 @@ def progress(percent, width=40):
 
 
 for i in range(start, end):
-    print("{i}/{}".format(end-start))
+    print("{}/{}".format(i,end-start))
     response = requests.get(search_URL+str(i))
     result_page = BeautifulSoup(response.content, 'html5lib')
 
