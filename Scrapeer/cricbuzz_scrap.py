@@ -9,9 +9,6 @@ from datetime import datetime
 now = datetime.now()
 current_time = now.strftime("%H_%M_%S")
 
-player = {"id": "", "born": "", "name": "", "country": "", "role": "",
-          "batting_style": "", "bowling_style": "", "bowling_hand": "", "bowling_type": ""}
-
 
 #TODO: Soumma READ THIS
 # choose values in pair; like if we choose start = 5000 it must be end = 10000
@@ -54,6 +51,9 @@ for i in range(start, end):
 
     if name != None and name.string != None:
         name = str(name.string).lower().strip()
+        player = {"id": "", "born": "", "name": "", "country": "", "role": "",
+                  "batting_style": "", "bowling_style": "", "bowling_hand": "", "bowling_type": ""}
+        
         player["id"] = i
         player["name"] = name
 
