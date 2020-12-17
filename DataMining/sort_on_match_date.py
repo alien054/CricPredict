@@ -1,3 +1,4 @@
+
 import yaml
 import os
 from shutil import copy2
@@ -8,6 +9,7 @@ def progress(percent, width=40):
     right = width - left
     print('\r[', '#' * left, ' ' * right, ']',
           f' {percent:.0f}%', sep='', end='', flush=True)
+
 
 path = "../../data/all_male/"
 newPath = "../../data/date_wise/"
@@ -32,11 +34,7 @@ for file in files:
     if os.path.isfile(newPath + play_date + '.yaml'):
         # print("Match in same day!!!")
         play_date = play_date + "-" + str(index)
-    copy2(path+file,newPath+play_date+'.yaml')
+    copy2(path+file, newPath+play_date+'.yaml')
     # print(play_date)
     index += 1
     progress(int(index*100/len(files)))
-    
-
-
-
