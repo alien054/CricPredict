@@ -27,15 +27,14 @@ for i in range(1):
         match_data['match_type'] = data['info']['match_type']
 
         innings = data['innings']
-
+        pre_team_total = 0
         for inning in innings:
             # if count > 0:
             #     break
             # count += 1
-            #TODO: team_total,team_wicket,team_target
             team_data = {'batting_team': "", 'fielding_team': "",
                          'innings': "", 'over': 0, 'ball': 0,
-                         'team_total:','team_wicket':0,'team_target':0
+                         'team_total':0,'team_wicket':0,'team_target':0
                          }
             score_data = {'current_ball': 0, '01st_last_ball': 0, '02nd_last_ball': 0,
                           '03rd_last_ball': 0, '04th_last_ball': 0, '05th_last_ball': 0,
@@ -51,6 +50,7 @@ for i in range(1):
             team_data['innings'] = innings_key
             team_data['batting_team'] = inning[innings_key]['team']
             team_data['fielding_team'] = team1 if team_data['batting_team'] != team1 else team2
+            team_data['team_target'] = pre_team_total
             print(team_data)
 
             deliveries = inning[innings_key]['deliveries']
@@ -90,7 +90,8 @@ for i in range(1):
                 team_data['ball'] = ball
 
                 current_ball_run = delivery[delivery_key]['runs']['total']
-
+                team_data['team_total'] = team_data['team_total'] + current_ball_run
+                
                 if this_over == prev_over:
                     this_over_run += current_ball_run
                 else:
@@ -134,6 +135,8 @@ for i in range(1):
                 batsman_out = False
                 if 'wicket' in list(delivery[delivery_key].keys()):
                     batsman_out = True
+                    team_data['team_wicket'] = team_data['team_wicket'] + 1
+                    
                     current_ball_run = 10
                     if six_ball_wicket_q.full():
                         six_ball_wicket_q.get()
@@ -269,7 +272,13 @@ for i in range(1):
                 with open('score.yaml', 'a') as score:
                     yaml.dump(score_data, score, default_flow_style=False)
                 print(this_over, " ", ball, " ", score_data['current_ball'])
+            
+            pre_team_total = team_data['team_total']
+                 
+     
         print(match_data)
+    
+        
 
     index += 1
     print("{}/{}".format(index, len(files)))

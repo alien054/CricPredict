@@ -15,26 +15,27 @@ path = "../../../data/date_wise/"
 
 paths = {'TEST': "../../../data/test/",
          'T20': "../../../data/t20/",
-         'ODI': "../../../data/odi/"
+         'ODI': "../../../data/odi/",
+         'OTHER': "../../../data/other/",
          }
 
 
-def create_dir(path):
-    print(path)
-    if os.path.isdir(path):
-        print("Already exist")
-        print("Deleting Directory.....")
-        shutil.rmtree(path)
-        print("Creating new Directory.....")
-        os.mkdir(path)
-        print("Directory created")
-    else:
-        os.mkdir(path)
-        print("Directory created")
+# def create_dir(path):
+#     print(path)
+#     if os.path.isdir(path):
+#         print("Already exist")
+#         print("Deleting Directory.....")
+#         shutil.rmtree(path)
+#         print("Creating new Directory.....")
+#         os.mkdir(path)
+#         print("Directory created")
+#     else:
+#         os.mkdir(path)
+#         print("Directory created")
 
 
-for addr in paths:
-    create_dir(paths[addr])
+# for addr in paths:
+#     create_dir(paths[addr])
     
 files = [file for file in os.listdir(path) if 'yaml' in file]
 
@@ -46,7 +47,9 @@ for file in files:
         data = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
     match_type = str(data['info']['match_type']).upper()
-
+    if match_type not in paths.keys():
+        match_type = "OTHER"
+    # print(file)
     shutil.copy2(path+file, paths[match_type]+file)
 
     index += 1
