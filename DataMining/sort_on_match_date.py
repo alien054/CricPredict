@@ -1,8 +1,7 @@
-
 import yaml
 import os
 from shutil import copy2
-
+import csv
 
 def progress(percent, width=40):
     left = (width * percent) // 100
