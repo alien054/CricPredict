@@ -4,8 +4,9 @@ import csv
 from datetime import datetime
 from queue import Queue
 
-path = "../../../data/odi/"
-newPath = "../../../data/csv/odi/"
+path = "../../../data/t20/"
+newPath = "../../../data/csv/t20/"
+
 
 def create_dir(path):
     if os.path.isdir(path):
@@ -14,28 +15,22 @@ def create_dir(path):
         os.mkdir(path)
         print("Directory created")
 
+
 create_dir(newPath)
 
 files = [file for file in os.listdir(path) if 'yaml' in file]
 
-csv_row_names = ['toss','venue','match_type','batting_team','fielding_team','innings','over','ball'
-                 ,'team_total','team_wicket','team_target','current_ball','01st_last_ball','02nd_last_ball'
-                 ,'03rd_last_ball','04th_last_ball','05th_last_ball','06th_last_ball','07th_last_ball','08th_last_ball'
-                 ,'09th_last_ball', '10th_last_ball', '11th_last_ball', '12th_last_ball', 'last_1st_over_run', 'last_2nd_over_run'
-                 , 'last_3rd_over_run', 'last_4th_over_run', 'last_5th_over_run', 'total_last_2_over', 'total_last_5_over', 'total_last_10_over'
-                 , 'wicket_in_last_6', 'wicket_in_last_12', 'wicket_in_last_30', 'batsman_name', 'batsman_team', 'non_strike', 'batting_position'
-                 , 'run_scored', 'balls_faced', 'boundary', 'dot_ball', 'single_double', 'fifty', 'hundred', 'is_out', 'balls_before_out'
-                 , 'bowler_name', 'bowler_team', 'innings_no', 'run_given', 'balls_delivered', 'boundary_given', 'dot_ball_given', 'single_double_given'
-                 , 'five_haul', 'ten_haul', 'wicket_taken']
+csv_row_names = ['toss', 'venue', 'match_type', 'batting_team', 'fielding_team', 'innings', 'over', 'ball', 'team_total', 'team_wicket', 'team_target', 'current_ball', '01st_last_ball', '02nd_last_ball', '03rd_last_ball', '04th_last_ball', '05th_last_ball', '06th_last_ball', '07th_last_ball', '08th_last_ball', '09th_last_ball', '10th_last_ball', '11th_last_ball', '12th_last_ball', 'last_1st_over_run', 'last_2nd_over_run', 'last_3rd_over_run', 'last_4th_over_run', 'last_5th_over_run',
+                 'total_last_2_over', 'total_last_5_over', 'total_last_10_over', 'wicket_in_last_6', 'wicket_in_last_12', 'wicket_in_last_30', 'batsman_name', 'batsman_team', 'non_strike', 'batting_position', 'run_scored', 'balls_faced', 'boundary', 'dot_ball', 'single_double', 'fifty', 'hundred', 'is_out', 'balls_before_out', 'bowler_name', 'bowler_team', 'innings_no', 'run_given', 'balls_delivered', 'boundary_given', 'dot_ball_given', 'single_double_given', 'five_haul', 'ten_haul', 'wicket_taken']
 print(len(csv_row_names))
 index = 0
 
 count = 0
 for file in files:
-    csv_file = open(newPath+file.replace('yaml','csv'), 'w', newline='')
+    csv_file = open(newPath+file.replace('yaml', 'csv'), 'w', newline='')
     writer = csv.DictWriter(csv_file, fieldnames=csv_row_names)
     writer.writeheader()
-    
+
     with open(path + file, "r") as yamlfile:
         data = yaml.load(yamlfile, Loader=yaml.FullLoader)
         match_data = {'toss': "", 'venue': "", 'match_type': ""}
@@ -43,7 +38,7 @@ for file in files:
         # if count > 0:
         #         break
         # count += 1
-            
+
         batsman_data = {}
         bowler_data = {}
 
@@ -56,19 +51,19 @@ for file in files:
         innings = data['innings']
         pre_team_total = 0
         for inning in innings:
-            
+
             team_data = {'batting_team': "", 'fielding_team': "",
                          'innings': "", 'over': 0, 'ball': 0,
-                         'team_total':0,'team_wicket':0,'team_target':0
+                         'team_total': 0, 'team_wicket': 0, 'team_target': 0
                          }
             score_data = {'current_ball': 0, '01st_last_ball': 0, '02nd_last_ball': 0,
                           '03rd_last_ball': 0, '04th_last_ball': 0, '05th_last_ball': 0,
-                          '06th_last_ball': 0,'07th_last_ball': 0, '08th_last_ball': 0, '09th_last_ball': 0, 
-                          '10th_last_ball': 0, '11th_last_ball': 0, '12th_last_ball': 0, 
+                          '06th_last_ball': 0, '07th_last_ball': 0, '08th_last_ball': 0, '09th_last_ball': 0,
+                          '10th_last_ball': 0, '11th_last_ball': 0, '12th_last_ball': 0,
                           'last_1st_over_run': 0, 'last_2nd_over_run': 0,
                           'last_3rd_over_run': 0, 'last_4th_over_run': 0, 'last_5th_over_run': 0,
                           'total_last_2_over': 0, 'total_last_5_over': 0, 'total_last_10_over': 0,
-                          'wicket_in_last_6':0,'wicket_in_last_12':0,'wicket_in_last_30':0
+                          'wicket_in_last_6': 0, 'wicket_in_last_12': 0, 'wicket_in_last_30': 0
                           }
 
             innings_key = list(inning.keys())[0]
@@ -86,9 +81,9 @@ for file in files:
             two_over_q = Queue(maxsize=2)
             five_over_q = Queue(maxsize=5)
             ten_over_q = Queue(maxsize=10)
-            
+
             twelve_ball_run_q = Queue(maxsize=12)
-            
+
             six_ball_wicket_q = Queue(maxsize=6)
             twelve_ball_wicket_q = Queue(maxsize=12)
             thirty_ball_wicket_q = Queue(maxsize=30)
@@ -117,7 +112,7 @@ for file in files:
                 current_ball_run = delivery[delivery_key]['runs']['total']
                 current_ball_run_for_total = current_ball_run
                 # team_data['team_total'] = team_data['team_total'] + current_ball_run
-                
+
                 if this_over == prev_over:
                     this_over_run += current_ball_run
                 else:
@@ -146,33 +141,38 @@ for file in files:
                     score_data['last_2nd_over_run'] = last_5_over_list[3]
                     score_data['last_1st_over_run'] = last_5_over_list[4]
 
-                    score_data['total_last_2_over'] = sum(list(two_over_q.queue))
-                    score_data['total_last_5_over'] = sum(list(five_over_q.queue))
-                    score_data['total_last_10_over'] = sum(list(ten_over_q.queue))
+                    score_data['total_last_2_over'] = sum(
+                        list(two_over_q.queue))
+                    score_data['total_last_5_over'] = sum(
+                        list(five_over_q.queue))
+                    score_data['total_last_10_over'] = sum(
+                        list(ten_over_q.queue))
 
                     this_over_run = current_ball_run
 
                 prev_over = this_over
-                
-                score_data['wicket_in_last_6'] = sum(list(six_ball_wicket_q.queue))
-                score_data['wicket_in_last_12'] = sum(list(twelve_ball_wicket_q.queue))
-                score_data['wicket_in_last_30'] = sum(list(thirty_ball_wicket_q.queue))
-                
+
+                score_data['wicket_in_last_6'] = sum(
+                    list(six_ball_wicket_q.queue))
+                score_data['wicket_in_last_12'] = sum(
+                    list(twelve_ball_wicket_q.queue))
+                score_data['wicket_in_last_30'] = sum(
+                    list(thirty_ball_wicket_q.queue))
+
                 batsman_out = False
                 if 'wicket' in list(delivery[delivery_key].keys()):
                     batsman_out = True
                     # team_data['team_wicket'] = team_data['team_wicket'] + 1
-                    
-                    
+
                     current_ball_run = 10
                     if six_ball_wicket_q.full():
                         six_ball_wicket_q.get()
                     six_ball_wicket_q.put(1)
-                    
+
                     if twelve_ball_wicket_q.full():
                         twelve_ball_wicket_q.get()
                     twelve_ball_wicket_q.put(1)
-                    
+
                     if thirty_ball_wicket_q.full():
                         thirty_ball_wicket_q.get()
                     thirty_ball_wicket_q.put(1)
@@ -188,7 +188,7 @@ for file in files:
                     if thirty_ball_wicket_q.full():
                         thirty_ball_wicket_q.get()
                     thirty_ball_wicket_q.put(0)
-                
+
                 last_12_ball_run_list = list(twelve_ball_run_q.queue)
                 score_data['12th_last_ball'] = last_12_ball_run_list[0]
                 score_data['11th_last_ball'] = last_12_ball_run_list[1]
@@ -216,7 +216,7 @@ for file in files:
                 if batsman_name not in list(batsman_data.keys()):
                     batsman_order += 1
                     batsman_data[batsman_name] = {
-                        'batsman_name':batsman_name,
+                        'batsman_name': batsman_name,
                         'batsman_team': team_data['batting_team'],
                         'non_strike': delivery[delivery_key]['non_striker'],
                         'innings': innings_key,
@@ -245,11 +245,12 @@ for file in files:
                         'ten_haul': 0,
                         'wicket_taken': 0,
                     }
-                
-                row_data = {**match_data,**team_data,**score_data,**batsman_data[batsman_name],**bowler_data[bowler_name]}
+
+                row_data = {**match_data, **team_data, **score_data, **
+                            batsman_data[batsman_name], **bowler_data[bowler_name]}
                 writer.writerow(row_data)
 
-                # batsman_data[batsman_name]['batsman_name'] = batsman_name 
+                # batsman_data[batsman_name]['batsman_name'] = batsman_name
                 # batsman_data[batsman_name]['non_strike'] = delivery[delivery_key]['non_striker']
                 batsman_run = delivery[delivery_key]['runs']['batsman']
                 batsman_data[batsman_name]['run_scored'] = batsman_data[batsman_name]['run_scored'] + batsman_run
@@ -274,8 +275,6 @@ for file in files:
                     batsman_data[batsman_name]['balls_before_out'] = batsman_data[batsman_name]['balls_faced']
 
                 # batsman_data['ball'] = delivery_key
-
-                
 
                 # bowler_data[bowler_name]['bowler_name'] = bowler_name
                 bowler_run = delivery[delivery_key]['runs']['total']
@@ -307,23 +306,20 @@ for file in files:
                 # with open('score.yaml', 'a') as score:
                 #     yaml.dump(score_data, score, default_flow_style=False)
                 # print(this_over, " ", ball, " ", score_data['current_ball'])
-                
+
                 # row_data = {**match_data,**team_data,**score_data,**batsman_data[batsman_name],**bowler_data[bowler_name]}
                 # writer.writerow(row_data)
-                
-                team_data['team_total'] = team_data['team_total'] + current_ball_run_for_total
+
+                team_data['team_total'] = team_data['team_total'] + \
+                    current_ball_run_for_total
                 if batsman_out:
                     team_data['team_wicket'] = team_data['team_wicket'] + 1
-                    
-                
-            
+
             pre_team_total = team_data['team_total']
-            
-     
+
         # print(match_data)
-    
+
     csv_file.close()
-        
-    
+
     index += 1
     print("{}/{}".format(index, len(files)))
